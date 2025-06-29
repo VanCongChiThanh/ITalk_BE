@@ -1,0 +1,35 @@
+server:
+  port: 8105
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/i-talk
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      max-lifetime: 60000
+  rabbitmq:
+    host:
+    username:
+    password:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+org:
+  jobrunr:
+    background-job-server:
+      enabled: true
+#    dashboard:
+#      enabled: true
+origin-patterns: "https://*.vercel.app"
+dev-patterns: "http://localhost:3000"
+web-url: "https://italk.vercel.app"
+italk-mail:
+  domain: i-talk.com

@@ -1,0 +1,38 @@
+package com.chithanh.italk.user.service.impl;
+
+import com.chithanh.italk.common.exception.NotFoundException;
+import com.chithanh.italk.user.config.DomainProperties;
+import com.chithanh.italk.user.domain.UserInfo;
+import com.chithanh.italk.user.repository.UserInfoRepository;
+import com.chithanh.italk.user.service.UserInfoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class UserInfoServiceImpl implements UserInfoService {
+    private final UserInfoRepository userInfoRepository;
+    @Override
+    public UserInfo createUserInfo(UUID userId, String firstname, String lastname) {
+        UserInfo userInfo = toUserInfoEntity(userId, firstname, lastname);
+        return userInfoRepository.save(userInfo);
+    }
+
+    @Override
+    public UserInfo getUserInfoByUserId(UUID userId) {
+        return userInfoRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException("UserInfo not found for userId: " + userId));
+    }
+
+    private UserInfo toUserInfoEntity(UUID userId, String firstname, String lastname) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(userId);
+        userInfo.setFirstName(firstname);
+        userInfo.setLastName(lastname);
+        return userInfo;
+    }
+}

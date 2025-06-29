@@ -1,0 +1,197 @@
+package com.chithanh.italk.web.endpoint.auth;
+
+
+import com.chithanh.italk.common.constant.MessageConstant;
+import com.chithanh.italk.common.domain.enums.Role;
+import com.chithanh.italk.common.exception.BadRequestException;
+import com.chithanh.italk.common.exception.ForbiddenException;
+import com.chithanh.italk.common.exception.UnauthorizedException;
+import com.chithanh.italk.common.payload.general.ResponseDataAPI;
+import com.chithanh.italk.security.domain.User;
+import com.chithanh.italk.security.domain.UserPrincipal;
+import com.chithanh.italk.security.domain.enums.AuthProvider;
+import com.chithanh.italk.security.payload.request.LoginRequest;
+import com.chithanh.italk.security.payload.request.RefreshTokenRequest;
+import com.chithanh.italk.security.service.OauthAccessTokenService;
+import com.chithanh.italk.security.token.TokenProvider;
+import com.chithanh.italk.user.payload.request.user.SignOutAllRequest;
+import com.chithanh.italk.user.service.UserService;
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Optional;
+
+@Slf4j
+@RestController
+@RequestMapping("/v1")
+@RequiredArgsConstructor
+@Api(tags = "Auth APIs")
+public class AuthController {
+
+  private final AuthenticationManager authenticationManager;
+
+  private final TokenProvider tokenProvider;
+
+  private final OauthAccessTokenService oauthAccessTokenService;
+
+  private final UserService userService;
+
+  /**
+   * Login
+   *
+   * @param loginRequest {@link LoginRequest}
+   * @return ResponseDataAPI
+   */
+  @PostMapping("/oauth/token")
+  public ResponseEntity<ResponseDataAPI> login(@Valid @RequestBody LoginRequest loginRequest) {
+    try {
+      Authentication authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                  loginRequest.getEmail().toLowerCase(), loginRequest.getPassword()));
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+      if (userPrincipal.getRole().equals(Role.ROLE_ADMIN)) {
+        throw new UnauthorizedException(MessageConstant.FORBIDDEN_ERROR);
+      }
+
+      return ResponseEntity.ok(
+          ResponseDataAPI.success(
+              tokenProvider.createOauthAccessToken(userPrincipal, AuthProvider.LOCAL), null));
+    } catch (BadCredentialsException e) {
+      throw new BadRequestException(MessageConstant.INCORRECT_EMAIL_OR_PASSWORD);
+    } catch (InternalAuthenticationServiceException e) {
+      throw new UnauthorizedException(MessageConstant.ACCOUNT_NOT_EXISTS);
+    } catch (DisabledException e) {
+      Optional<User> optional = userService.findByEmail(loginRequest.getEmail());
+      if (optional.isPresent() && optional.get().getConfirmedAt() != null) {
+        throw new UnauthorizedException(MessageConstant.ACCOUNT_BLOCKED);
+      } else {
+        throw new UnauthorizedException(MessageConstant.ACCOUNT_NOT_ACTIVATED);
+      }
+    } catch (AuthenticationException e) {
+      throw new UnauthorizedException(MessageConstant.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /**
+   * Login
+   *
+   * @param loginRequest {@link LoginRequest}
+   * @return ResponseDataAPI
+   */
+  @PostMapping("/admin/oauth/token")
+  public ResponseEntity<ResponseDataAPI> loginAdmin(@Valid @RequestBody LoginRequest loginRequest) {
+    try {
+      Authentication authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                  loginRequest.getEmail().toLowerCase(), loginRequest.getPassword()));
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+      if (!userPrincipal.getRole().equals(Role.ROLE_ADMIN)) {
+        throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
+      }
+      return ResponseEntity.ok(
+          ResponseDataAPI.success(
+              tokenProvider.createOauthAccessToken(userPrincipal, AuthProvider.LOCAL), null));
+    } catch (BadCredentialsException e) {
+      throw new BadRequestException(MessageConstant.INCORRECT_EMAIL_OR_PASSWORD);
+    } catch (InternalAuthenticationServiceException e) {
+      throw new UnauthorizedException(MessageConstant.ACCOUNT_NOT_EXISTS);
+    } catch (DisabledException e) {
+      Optional<User> optional = userService.findByEmail(loginRequest.getEmail());
+      if (optional.isPresent() && optional.get().getConfirmedAt() != null) {
+        throw new UnauthorizedException(MessageConstant.ACCOUNT_BLOCKED);
+      } else {
+        throw new UnauthorizedException(MessageConstant.ACCOUNT_NOT_ACTIVATED);
+      }
+    } catch (AuthenticationException e) {
+      throw new UnauthorizedException(MessageConstant.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /**
+   * Refresh token
+   *
+   * @param refreshTokenRequest {@link RefreshTokenRequest}
+   * @return ResponseDataAPI
+   */
+  @PostMapping("/refresh_tokens")
+  public ResponseEntity<ResponseDataAPI> refreshTokenUser(
+      @Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    return ResponseEntity.ok(
+        ResponseDataAPI.success(
+            tokenProvider.refreshTokenOauthAccessToken(
+                refreshTokenRequest.getRefreshToken(), false),
+            null));
+  }
+
+  /**
+   * Refresh token
+   *
+   * @param refreshTokenRequest {@link RefreshTokenRequest}
+   * @return ResponseDataAPI
+   */
+  @PostMapping("/admin/refresh_tokens")
+  public ResponseEntity<ResponseDataAPI> refreshTokenAdmin(
+      @Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    return ResponseEntity.ok(
+        ResponseDataAPI.success(
+            tokenProvider.refreshTokenOauthAccessToken(refreshTokenRequest.getRefreshToken(), true),
+            null));
+  }
+
+  /**
+   * Revoke token
+   *
+   * @param request {@link HttpServletRequest}
+   * @return ResponseDataAPI
+   */
+  @PostMapping("/oauth/revoke")
+  public ResponseEntity<ResponseDataAPI> logout(HttpServletRequest request) {
+    String bearerToken = request.getHeader("Authorization");
+    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+      bearerToken = bearerToken.substring(7);
+    }
+    oauthAccessTokenService.revoke(tokenProvider.getOauthAccessTokenFromToken(bearerToken));
+    return ResponseEntity.ok(ResponseDataAPI.success(null, null));
+  }
+
+  /**
+   * Revoke all token
+   *
+   * @param signOutAllRequest {@link SignOutAllRequest}
+   * @return ResponseDataAPI
+   */
+  @PostMapping("/oauth/revoke-all")
+  public ResponseEntity<ResponseDataAPI> allLogout(
+          @Valid @RequestBody SignOutAllRequest signOutAllRequest, HttpServletRequest request) {
+    String bearerToken = request.getHeader("Authorization");
+    if (!StringUtils.hasText(bearerToken)) {
+      oauthAccessTokenService.revokeAll(null, signOutAllRequest.getEmail());
+      return ResponseEntity.ok(ResponseDataAPI.success(null, null));
+    } else {
+      if (bearerToken.startsWith("Bearer ")) {
+        bearerToken = bearerToken.substring(7);
+      }
+      oauthAccessTokenService.revokeAll(
+          tokenProvider.getOauthAccessTokenFromToken(bearerToken), signOutAllRequest.getEmail());
+    }
+
+    return ResponseEntity.ok(ResponseDataAPI.success(null, null));
+  }
+}
