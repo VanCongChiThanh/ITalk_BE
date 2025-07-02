@@ -5,6 +5,7 @@ package com.chithanh.italk.user.service;
 import com.chithanh.italk.common.domain.enums.Role;
 import com.chithanh.italk.common.payload.general.ResponseDataAPI;
 import com.chithanh.italk.security.domain.User;
+import com.chithanh.italk.security.domain.enums.AuthProvider;
 import com.chithanh.italk.user.payload.request.user.ChangePasswordRequest;
 import com.chithanh.italk.user.payload.request.user.ForgotPasswordRequest;
 import com.chithanh.italk.user.payload.request.user.ResetPasswordRequest;
@@ -80,7 +81,8 @@ public interface UserService {
    * @param role Role
    */
   User registerUser(String firstname, String lastname, String email, String password, Role role);
-
+  User registerUserOauth2(
+          String firstname, String lastname, String email, String avatar, AuthProvider provider, String providerId);
   /**
    * Confirm email register
    *

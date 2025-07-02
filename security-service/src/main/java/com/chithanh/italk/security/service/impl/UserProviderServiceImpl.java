@@ -41,4 +41,9 @@ public class UserProviderServiceImpl implements UserProviderService {
   public Optional<UserProvider> findByEmail(String email) {
     return userProviderRepository.findFirstByEmailOrderByCreatedAtDesc(email);
   }
+
+  @Override
+  public Optional<UserProvider> findByProviderIdAndProvider(String googleId, AuthProvider authProvider) {
+    return userProviderRepository.findByProviderIdAndProvider(googleId, authProvider);
+  }
 }

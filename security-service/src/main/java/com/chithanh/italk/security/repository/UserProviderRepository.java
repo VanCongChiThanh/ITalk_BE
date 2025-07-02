@@ -15,4 +15,6 @@ public interface UserProviderRepository extends JpaRepository<UserProvider, UUID
           String providerId, AuthProvider authProvider, String email);
 
   Optional<UserProvider> findFirstByEmailOrderByCreatedAtDesc(String email);
+
+  Optional<UserProvider> findByProviderIdAndProvider(String googleId, AuthProvider authProvider);
 }

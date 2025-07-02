@@ -17,8 +17,12 @@ import java.util.UUID;
 public class UserInfoServiceImpl implements UserInfoService {
     private final UserInfoRepository userInfoRepository;
     @Override
-    public UserInfo createUserInfo(UUID userId, String firstname, String lastname) {
+    public UserInfo createUserInfo(UUID userId, String firstname, String lastname, String avatar) {
         UserInfo userInfo = toUserInfoEntity(userId, firstname, lastname);
+        if(avatar != null && !avatar.isEmpty()) {
+            userInfo.setAvatar(avatar);
+        }
+        userInfo.setCanPostReel(false);
         return userInfoRepository.save(userInfo);
     }
 

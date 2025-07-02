@@ -121,16 +121,31 @@ public class UserServiceImpl implements UserService {
     user.setRole(role);
     User result = userRepository.save(user);
     userProviderService.create(AuthProvider.LOCAL, null, email.toLowerCase(), result);
-    userInfoService.createUserInfo(result.getId(), firstname, lastname);
+    userInfoService.createUserInfo(result.getId(), firstname, lastname,null);
     emailService.sendMailConfirmRegister(
         firstname, lastname, result.getEmail(), result.getConfirmationToken(), LANGUAGE_CODE);
     return result;
   }
-
+  @Override
+  public User registerUserOauth2(
+      String firstname, String lastname, String email, String avatar, AuthProvider provider,String providerId) {
+    if (userRepository.existsByEmail(email.toLowerCase())) {
+      throw new BadRequestException(MessageConstant.REGISTER_EMAIL_ALREADY_IN_USE);
+    }
+    User user = this.toUserEntity(email, null);
+    user.setRole(Role.ROLE_USER);
+    user.setIsEnabled(true);
+    User result = userRepository.save(user);
+    userProviderService.create(provider, providerId, email.toLowerCase(), result);
+    userInfoService.createUserInfo(result.getId(), firstname, lastname,avatar);
+    return result;
+  }
   private User toUserEntity(String email, String password) {
     User user = new User();
     user.setEmail(email.toLowerCase());
-    user.setPassword(passwordEncoder.encode(password));
+    if (password != null) {
+      user.setPassword(passwordEncoder.encode(password));
+    }
     user.setConfirmationToken(UUID.randomUUID());
     user.setActiveStatus(ActiveStatus.ACCEPT);
     return user;

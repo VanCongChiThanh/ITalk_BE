@@ -13,4 +13,6 @@ public interface UserProviderService {
   Optional<UserProvider> findByProvider(String providerId, AuthProvider authProvider, String email);
 
   Optional<UserProvider> findByEmail(String email);
+
+  Optional<UserProvider> findByProviderIdAndProvider(String googleId, AuthProvider authProvider);
 }

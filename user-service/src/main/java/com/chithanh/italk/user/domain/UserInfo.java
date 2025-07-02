@@ -39,5 +39,4 @@ public class UserInfo extends AbstractEntity {
 
     private Integer streakCount;
 
-    @Column private boolean isActive;
 }

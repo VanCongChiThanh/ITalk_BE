@@ -2,6 +2,7 @@ package com.chithanh.italk.security.service;
 
 
 import com.chithanh.italk.security.domain.User;
+import com.chithanh.italk.security.domain.enums.AuthProvider;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -24,5 +25,5 @@ public interface UserAuthService {
    */
   User findById(UUID id);
 
-  User registerUserOauth2(String name, String email, String password);
+
 }
