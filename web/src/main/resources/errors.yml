@@ -253,24 +253,10 @@ session_manager_not_found:
 call_type_invalid:
   code: ERR.TE0201
   message: Call type invalid
-
-#note
-note_not_found:
-  code: ERR.NO0101
-  message: Note not found
-label_not_attached_to_note:
-  code: ERR.NO0201
-  message: Label not attached to note
-label_already_attached_to_note:
-  code: ERR.NO0201
-  message: Label already attached to note
-
-
-#label
-label_not_found:
-  code: ERR.LA0101
-  message: Label not found
-#reminder
-reminder_already_set_to_note:
-  code: ERR.RM0101
-  message: Reminder already set to note
+#challenge
+challenge_not_found:
+  code: ERR.CH0101
+  message: Challenge not found
+all_challenge_completed:
+  code: ERR.CH0201
+  message: All challenges completed

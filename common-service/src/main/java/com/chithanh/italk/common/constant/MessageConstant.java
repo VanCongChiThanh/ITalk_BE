@@ -55,7 +55,9 @@ public final class MessageConstant {
   public static final String FILE_NOT_FOUND = "file_not_found";
   public static final String FILE_URL_IS_ERROR = "file_url_is_error";
   public static final String FILE_IS_DELETED_FAILED = "file_is_deleted_failed";
-
+  //Challenge
+  public static final String CHALLENGE_NOT_FOUND = "challenge_not_found";
+  public static final String ALL_CHALLENGES_COMPLETED = "all_challenges_completed";
 
   private MessageConstant() {}
 }

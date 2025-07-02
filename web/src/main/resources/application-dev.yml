@@ -29,7 +29,28 @@ org:
 #    dashboard:
 #      enabled: true
 origin-patterns: "https://*.vercel.app"
-dev-patterns: "http://localhost:3000"
+dev-patterns: "http://localhost:5173"
 web-url: "https://italk.vercel.app"
 italk-mail:
   domain: i-talk.com
+
+app:
+  oauth2:
+    providers:
+      google:
+        clientId: ${GOOGLE_CLIENT_ID}
+        clientSecret: ${GOOGLE_CLIENT_SECRET}
+        redirectUri: http://localhost:8105/api/v1/oauth2/google/login
+      facebook:
+        clientId: ${FACEBOOK_CLIENT_ID}
+        clientSecret: ${FACEBOOK_CLIENT_SECRET}
+        redirectUri: http://localhost:8105/api/v1/oauth2/facebook/login
+cloudinary:
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+gcs:
+  url: https://storage.cloud.google.com
+  project-id:
+  bucket-name:
+  credential-path: D:\SPRING REST API\json\1741262156123-key.json

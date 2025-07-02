@@ -12,9 +12,13 @@ import com.chithanh.italk.security.domain.UserPrincipal;
 import com.chithanh.italk.security.domain.enums.AuthProvider;
 import com.chithanh.italk.security.payload.request.LoginRequest;
 import com.chithanh.italk.security.payload.request.RefreshTokenRequest;
+import com.chithanh.italk.security.payload.response.Oauth2Info;
+import com.chithanh.italk.security.payload.response.OauthAccessTokenResponse;
+import com.chithanh.italk.security.service.Oauth2LoginService;
 import com.chithanh.italk.security.service.OauthAccessTokenService;
 import com.chithanh.italk.security.token.TokenProvider;
 import com.chithanh.italk.user.payload.request.user.SignOutAllRequest;
+import com.chithanh.italk.user.service.UserInfoService;
 import com.chithanh.italk.user.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -48,6 +49,8 @@ public class AuthController {
   private final OauthAccessTokenService oauthAccessTokenService;
 
   private final UserService userService;
+  private final UserInfoService userInfoService;
+  private final Oauth2LoginService oauth2LoginService;
 
   /**
    * Login
@@ -124,6 +127,19 @@ public class AuthController {
     }
   }
 
+  @GetMapping("oauth2/{provider}/login")
+  public ResponseEntity<ResponseDataAPI> oauth2Login(
+          @PathVariable("provider") String provider,
+          @RequestParam("code") String code) {
+    AuthProvider authProvider= AuthProvider.valueOf(provider.toUpperCase());
+    Oauth2Info info = oauth2LoginService.login(authProvider, code);
+    User user=userService.registerUserOauth2(
+            info.getFirstName(),info.getLastName(), info.getEmail(), info.getAvatarUrl(), authProvider, info.getProviderId());
+    return ResponseEntity.ok(
+        ResponseDataAPI.success(
+            tokenProvider.createOauthAccessToken(
+                UserPrincipal.create(user), authProvider),null));
+  }
   /**
    * Refresh token
    *

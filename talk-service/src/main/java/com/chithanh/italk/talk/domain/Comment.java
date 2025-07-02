@@ -2,10 +2,12 @@ package com.chithanh.italk.talk.domain;
 
 import com.chithanh.italk.common.domain.AbstractEntity;
 import com.chithanh.italk.security.domain.User;
+import com.chithanh.italk.talk.domain.enums.TargetType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -15,22 +17,22 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "submissions")
-public class Submission extends AbstractEntity {
+@Table(name = "comments")
+public class Comment extends AbstractEntity {
     @Id
     @GeneratedValue
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "challenge_id", nullable = false)
-    private Challenge challenge;
+    @Enumerated(EnumType.STRING)
+    private TargetType targetType;
+    private UUID targetId; // ID of the reel,submission or comment being replied to
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
-    private String audioUrl;
-    private Integer score;
-    private String feedback;
+    private User user; // User who made the comment
+
+    private String content;
+
     private Integer likesCount = 0;
 }

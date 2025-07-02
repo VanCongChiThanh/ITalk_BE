@@ -19,7 +19,11 @@
             <groupId>com.chithanh</groupId>
             <artifactId>user-service</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.chithanh</groupId>
+            <artifactId>talk-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
