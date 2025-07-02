@@ -3,7 +3,9 @@ package com.chithanh.italk.security.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
@@ -59,14 +61,51 @@ public class AppProperties {
 
     public static final class OAuth2 {
         private List<String> authorizedRedirectUris = new ArrayList<>();
+        private Map<String, OAuth2Provider> providers = new HashMap<>();
 
         public List<String> getAuthorizedRedirectUris() {
             return authorizedRedirectUris;
         }
 
-        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
+        public void setAuthorizedRedirectUris(List<String> authorizedRedirectUris) {
             this.authorizedRedirectUris = authorizedRedirectUris;
-            return this;
+        }
+
+        public Map<String, OAuth2Provider> getProviders() {
+            return providers;
+        }
+
+        public void setProviders(Map<String, OAuth2Provider> providers) {
+            this.providers = providers;
+        }
+        public static class OAuth2Provider {
+            private String clientId;
+            private String clientSecret;
+            private String redirectUri;
+
+            public String getClientId() {
+                return clientId;
+            }
+
+            public void setClientId(String clientId) {
+                this.clientId = clientId;
+            }
+
+            public String getClientSecret() {
+                return clientSecret;
+            }
+
+            public void setClientSecret(String clientSecret) {
+                this.clientSecret = clientSecret;
+            }
+
+            public String getRedirectUri() {
+                return redirectUri;
+            }
+
+            public void setRedirectUri(String redirectUri) {
+                this.redirectUri = redirectUri;
+            }
         }
     }
 }
