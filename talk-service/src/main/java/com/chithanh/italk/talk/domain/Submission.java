@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -31,6 +32,10 @@ public class Submission extends AbstractEntity {
 
     private String audioUrl;
     private Integer score;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
     private String feedback;
+
     private Integer likesCount = 0;
 }

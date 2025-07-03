@@ -6,7 +6,6 @@ import com.chithanh.italk.talk.domain.Challenge;
 import com.chithanh.italk.talk.payload.request.ChallengeRequest;
 import com.chithanh.italk.talk.repository.ChallengeRepository;
 import com.chithanh.italk.talk.service.ChallengeService;
-import com.chithanh.italk.talk.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -43,32 +41,25 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .orElseThrow(() -> new NotFoundException(MessageConstant.CHALLENGE_NOT_FOUND));
     }
 
+
     @Override
-    public Challenge getRandomChallenge(UUID userId) {
-        //get challenges has been submitted at least once
-        List<UUID> completedChallengeIds = this.findChallengeIdsByUserId(userId);
-        List<Challenge> remainingChallenges;
+    public Challenge getRandomChallenge(UUID userId,List<UUID> completedChallengeIds) {
+        Challenge challenge;
 
         if (completedChallengeIds.isEmpty()) {
-            remainingChallenges = challengeRepository.findAll();
+            challenge= challengeRepository.findRandomChallenge();
         } else {
-            remainingChallenges = challengeRepository.findByIdNotIn(completedChallengeIds);
+            challenge = challengeRepository.findRandomChallengeExcluding(completedChallengeIds);
         }
-        if (remainingChallenges.isEmpty()) {
+        if (challenge == null) {
             throw new NotFoundException(MessageConstant.ALL_CHALLENGES_COMPLETED);
         }
-        Random random = new Random();
-        return remainingChallenges.get(random.nextInt(remainingChallenges.size()));
+        return challenge;
     }
 
     @Override
     public Page<Challenge> getAllChallenges(Pageable pageable) {
         return challengeRepository.findAll(pageable);
-    }
-
-    @Override
-    public List<UUID> findChallengeIdsByUserId(UUID userId) {
-        return challengeRepository.findChallengeIdsByUserId(userId);
     }
 
 }

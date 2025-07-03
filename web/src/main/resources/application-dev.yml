@@ -54,3 +54,7 @@ gcs:
   project-id:
   bucket-name:
   credential-path: D:\SPRING REST API\json\1741262156123-key.json
+gemini:
+    api-key: ${GEMINI_API_KEY}
+    base-url: https://generativelanguage.googleapis.com/v1beta/models
+    model-name: gemini-2.0-flash

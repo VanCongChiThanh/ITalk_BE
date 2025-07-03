@@ -12,7 +12,11 @@ import java.util.UUID;
 @Repository
 public interface ChallengeRepository extends JpaRepository<Challenge, UUID> {
     List<Challenge> findByIdNotIn(List<UUID> completedChallengeIds);
-    // Custom query methods can be defined here if needed
-    @Query("SELECT s.challenge.id FROM Submission s WHERE s.user.id = :userId")
-    List<UUID> findChallengeIdsByUserId(@Param("userId") UUID userId);
+
+    @Query(value = "SELECT * FROM challenges c WHERE c.id NOT IN (:completedIds) ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    Challenge findRandomChallengeExcluding(@Param("completedIds") List<UUID> completedIds);
+
+    @Query(value = "SELECT * FROM challenges ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    Challenge findRandomChallenge();
+
 }

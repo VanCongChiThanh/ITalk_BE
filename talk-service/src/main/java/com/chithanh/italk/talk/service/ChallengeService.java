@@ -13,7 +13,6 @@ public interface ChallengeService {
     Challenge createChallenge(ChallengeRequest request);
     Challenge updateChallenge(UUID challengeId, ChallengeRequest request);
     Challenge findById(UUID challengeId);
-    Challenge getRandomChallenge(UUID userId);
     Page<Challenge> getAllChallenges(Pageable pageable);
-    List<UUID> findChallengeIdsByUserId(UUID userId);
+    Challenge getRandomChallenge(UUID userId,List<UUID> completedChallengeIds);
 }

@@ -7,5 +7,5 @@ import java.io.File;
 public interface FileHandlerService {
 
   String uploadFile(File file, String fileName);
-  String uploadFileCloudinary(MultipartFile file,String fileName, String folder);
+  String uploadFileCloudinary(File file,String fileName, String folder);
 }

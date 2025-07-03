@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -22,15 +21,15 @@ public class SubmissionController {
     private final SubmissionMapper submissionMapper;
 
     @PostMapping("/challenges/{challengeId}/users/{userId}/submissions")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ApiOperation("submit a challenge")
     public ResponseEntity<ResponseDataAPI> submitChallenge(
             @PathVariable("challengeId") UUID challengeId,
             @PathVariable("userId") UUID userId,
-            @RequestParam MultipartFile audioFile
+            @RequestParam MultipartFile audio
     ) {
         Submission submission = submissionService.submit(
-                challengeId, userId, audioFile);
+                challengeId, userId, audio);
         return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(submissionMapper.toSubmissionResponse(submission)));
     }
 

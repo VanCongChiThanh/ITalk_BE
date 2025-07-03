@@ -57,10 +57,10 @@ public class FileHandlerServiceImpl implements FileHandlerService {
   }
 
   @Override
-  public String uploadFileCloudinary(MultipartFile file, String fileName,String folder) {
+  public String uploadFileCloudinary(File file, String fileName,String folder) {
     String fileUrl = "";
     try {
-      String mimeType = FileUtils.getMineType((File) file);
+      String mimeType = FileUtils.getMineType(file);
       if (this.checkMimeType(mimeType)) {
         fileName = FileUtils.generateFileName(fileName);
         Map<String, Object> uploadParams = ObjectUtils.asMap(
@@ -68,16 +68,13 @@ public class FileHandlerServiceImpl implements FileHandlerService {
                 "folder", folder,
                 "resource_type", "auto"
         );
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), uploadParams);
+        Map uploadResult = cloudinary.uploader().upload(file, uploadParams);
         fileUrl = (String) uploadResult.get("secure_url");
       } else {
         throw new BadRequestException(MessageConstant.FILE_NOT_FORMAT);
       }
     } catch (BadRequestException ex) {
       throw ex;
-    } catch (IOException e) {
-      log.error("Failed to upload file to Cloudinary: {}", e.getMessage());
-      throw new RuntimeException("Failed to upload file to Cloudinary: " + e.getMessage());
     } catch (Exception e) {
       log.error("Unexpected error during Cloudinary upload: {}", e.getMessage());
     }
