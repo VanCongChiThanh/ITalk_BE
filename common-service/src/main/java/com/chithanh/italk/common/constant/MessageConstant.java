@@ -58,6 +58,8 @@ public final class MessageConstant {
   //Challenge
   public static final String CHALLENGE_NOT_FOUND = "challenge_not_found";
   public static final String ALL_CHALLENGES_COMPLETED = "all_challenges_completed";
+  //user follow
+  public static final String USER_FOLLOW_NOT_FOUND = "user_follow_not_found";
 
   private MessageConstant() {}
 }
