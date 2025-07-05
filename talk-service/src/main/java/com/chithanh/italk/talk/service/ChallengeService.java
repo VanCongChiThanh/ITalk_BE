@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public interface ChallengeService {
     Challenge createChallenge(ChallengeRequest request);
+    List<Challenge> createChallenges(List<ChallengeRequest> requests);
     Challenge updateChallenge(UUID challengeId, ChallengeRequest request);
     Challenge findById(UUID challengeId);
     Page<Challenge> getAllChallenges(Pageable pageable);

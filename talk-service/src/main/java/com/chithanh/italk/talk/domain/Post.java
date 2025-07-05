@@ -2,6 +2,7 @@ package com.chithanh.italk.talk.domain;
 
 import com.chithanh.italk.common.domain.AbstractEntity;
 import com.chithanh.italk.security.domain.User;
+import com.chithanh.italk.talk.domain.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,9 @@ public class Post extends AbstractEntity {
     @GeneratedValue
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
+    private PostType type;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -32,6 +36,5 @@ public class Post extends AbstractEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
-
 
 }

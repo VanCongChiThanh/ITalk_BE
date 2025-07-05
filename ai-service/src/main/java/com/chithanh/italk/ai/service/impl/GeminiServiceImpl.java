@@ -2,6 +2,7 @@ package com.chithanh.italk.ai.service.impl;
 
 import com.chithanh.italk.ai.config.GeminiConfigProperties;
 import com.chithanh.italk.ai.service.GeminiService;
+import com.chithanh.italk.ai.utils.JsonCleaningUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -54,13 +55,16 @@ public class GeminiServiceImpl implements GeminiService {
                         "    {\"score\": <score 0-100>, \"title\": \"Pronunciation\", \"description\": \"detailed description\"},\n" +
                         "    {\"score\": <score 0-100>, \"title\": \"Vocabulary\", \"description\": \"detailed description\"}\n" +
                         "  ],\n" +
-                        "  \"suggestion\": \"actionable suggestion for improvement\"\n" +
+                        "  \"suggestion\": \"actionable suggestion for improvement\",\n" +
+                        "  \"summary\": \"short overall summary of the evaluation\"\n" +
                         "}\n\n" +
                         "Return ONLY valid JSON without any explanation or additional text.",
                 topic, transcript
         );
-        return callGeminiApi(prompt);
+        String response = callGeminiApi(prompt);
+        return JsonCleaningUtils.cleanJson(response);
     }
+
     private String callGeminiApi(String prompt) {
         String url = String.format("%s/%s:generateContent?key=%s",
                 geminiConfigProperties.getBaseUrl(),

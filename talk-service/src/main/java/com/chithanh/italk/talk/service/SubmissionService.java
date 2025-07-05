@@ -10,4 +10,5 @@ public interface SubmissionService {
     List<Submission> findSubmissionsByUserId(UUID userId);
     Submission submit(UUID challengeId, UUID userId, MultipartFile audioFile);
     List<UUID> findChallengeIdsByUserId(UUID userId);
+    Submission findTodaySubmission(UUID userId);
 }

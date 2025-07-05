@@ -2,11 +2,13 @@ package com.chithanh.italk.talk.domain;
 
 import com.chithanh.italk.common.domain.AbstractEntity;
 import com.chithanh.italk.security.domain.User;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Table(name = "submissions")
 public class Submission extends AbstractEntity {
     @Id

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,6 +27,15 @@ public class ChallengeServiceImpl implements ChallengeService {
         Challenge challenge= new Challenge();
         challenge.setQuestion(request.getQuestion());
         return challengeRepository.save(challenge);
+    }
+    @Override
+    public List<Challenge> createChallenges(List<ChallengeRequest> requests) {
+        List<Challenge> challenges = requests.stream().map(request -> {
+            Challenge challenge = new Challenge();
+            challenge.setQuestion(request.getQuestion());
+            return challenge;
+        }).collect(Collectors.toList());
+        return challengeRepository.saveAll(challenges);
     }
 
     @Override
