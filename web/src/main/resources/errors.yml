@@ -264,3 +264,6 @@ all_challenge_completed:
 user_follow_not_found:
   code: ERR.UF0101
   message: User follow not found
+user_follow_already_exists:
+    code: ERR.UF0201
+    message: User follow already exists

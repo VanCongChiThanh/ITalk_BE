@@ -3,9 +3,14 @@ package com.chithanh.italk.web.endpoint.talk;
 import com.chithanh.italk.common.payload.general.PageInfo;
 import com.chithanh.italk.common.payload.general.ResponseDataAPI;
 import com.chithanh.italk.common.utils.PagingUtils;
+import com.chithanh.italk.security.annotation.CurrentUser;
+import com.chithanh.italk.security.domain.UserPrincipal;
+import com.chithanh.italk.talk.domain.UserFollow;
 import com.chithanh.italk.talk.payload.response.FollowerResponse;
 import com.chithanh.italk.talk.payload.response.FollowingResponse;
+import com.chithanh.italk.talk.payload.response.UserFollowResponse;
 import com.chithanh.italk.talk.service.UserFollowService;
+import com.nimbusds.openid.connect.sdk.UserInfoResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -23,23 +28,34 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserFollowController {
     private final UserFollowService userFollowService;
-    @PostMapping("/users/{userId}/follow")
+    @PostMapping("/users/{userId}/follow/{followingId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ApiOperation("Follow a user")
     public ResponseEntity<ResponseDataAPI> followUser(
             @PathVariable("userId") UUID userId,
-            @RequestParam("followingId") UUID followingId
+            @PathVariable("followingId") UUID followingId,
+            @CurrentUser UserPrincipal userPrincipal
     ) {
-        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(userFollowService.followUser(userId, followingId)));
+        if (userPrincipal == null || !userPrincipal.getId().equals(userId)) {
+            return ResponseEntity.badRequest().body(ResponseDataAPI.error("You cannot follow on behalf of another user"));
+        }
+         UserFollow userFollow =userFollowService.followUser(userId, followingId);
+         UserFollowResponse response = UserFollowResponse.createUserFollowResponse(userFollow.getFollowerId(), userFollow.getFollowingId(), userFollow.getFollowedAt());
+        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(response));
     }
-    @DeleteMapping("/users/{userId}/unfollow")
+    @DeleteMapping("/users/{userId}/unfollow/{followingId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ApiOperation("Unfollow a user")
     public ResponseEntity<ResponseDataAPI> unfollowUser(
             @PathVariable("userId") UUID userId,
-            @RequestParam("followingId") UUID followingId
+            @PathVariable("followingId") UUID followingId,
+            @CurrentUser UserPrincipal userPrincipal
     ) {
-        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(userFollowService.unfollowUser(userId, followingId)));
+        if (userPrincipal == null || !userPrincipal.getId().equals(userId)) {
+            return ResponseEntity.badRequest().body(ResponseDataAPI.error("You cannot unfollow on behalf of another user"));
+        }
+        userFollowService.unfollowUser(userId, followingId);
+        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(null));
     }
     @GetMapping("/users/{userId}/followers")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")

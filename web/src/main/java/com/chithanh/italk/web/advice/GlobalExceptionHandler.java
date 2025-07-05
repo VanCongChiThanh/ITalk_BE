@@ -3,10 +3,7 @@ package com.chithanh.italk.web.advice;
 
 import com.chithanh.italk.common.common.CommonFunction;
 import com.chithanh.italk.common.constant.MessageConstant;
-import com.chithanh.italk.common.exception.BadRequestException;
-import com.chithanh.italk.common.exception.ForbiddenException;
-import com.chithanh.italk.common.exception.NotFoundException;
-import com.chithanh.italk.common.exception.UnauthorizedException;
+import com.chithanh.italk.common.exception.*;
 import com.chithanh.italk.common.payload.general.ResponseDataAPI;
 import com.chithanh.italk.common.payload.response.ErrorResponse;
 import org.springframework.http.HttpHeaders;
@@ -40,6 +37,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseDataAPI responseDataAPI = ResponseDataAPI.error(error);
     return new ResponseEntity<>(responseDataAPI, HttpStatus.NOT_FOUND);
   }
+  @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ResponseDataAPI> conflictException(
+            ConflictException ex, HttpServletRequest request) {
+        ErrorResponse error = CommonFunction.getExceptionError(ex.getMessage());
+        ResponseDataAPI responseDataAPI = ResponseDataAPI.error(error);
+        return new ResponseEntity<>(responseDataAPI, HttpStatus.CONFLICT);
+    }
 
   @ExceptionHandler(BadRequestException.class)
   public ResponseEntity<ResponseDataAPI> badRequestException(

@@ -19,4 +19,11 @@ public class UserFollowResponse {
     private UUID followerId;
     private UUID followingId;
     private Timestamp followedAt;
+    public static UserFollowResponse createUserFollowResponse(UUID followerId, UUID followingId, Timestamp followedAt) {
+        return UserFollowResponse.builder()
+                .followerId(followerId)
+                .followingId(followingId)
+                .followedAt(Timestamp.valueOf(followedAt.toLocalDateTime()))
+                .build();
+    }
 }

@@ -1,6 +1,7 @@
 package com.chithanh.italk.talk.service.impl;
 
 import com.chithanh.italk.common.constant.MessageConstant;
+import com.chithanh.italk.common.exception.ConflictException;
 import com.chithanh.italk.common.exception.NotFoundException;
 import com.chithanh.italk.security.domain.User;
 import com.chithanh.italk.talk.domain.UserFollow;
@@ -30,6 +31,10 @@ public class UserFollowServiceImpl implements UserFollowService {
     private final UserFollowRepository userFollowRepository;
     @Override
     public UserFollow followUser(UUID followerId, UUID followingId) {
+        // Check if the follower and following users exist
+        if (userFollowRepository.findByFollowingIdAndFollowerId(followingId, followerId).isPresent()) {
+            throw new ConflictException(MessageConstant.USER_FOLLOW_ALREADY_EXISTS);
+        }
         UserFollow userFollow = createUserFollow(followerId, followingId);
         return userFollowRepository.save(userFollow);
     }
