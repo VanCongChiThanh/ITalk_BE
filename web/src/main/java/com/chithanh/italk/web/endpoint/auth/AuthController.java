@@ -131,6 +131,7 @@ public class AuthController {
   public ResponseEntity<ResponseDataAPI> oauth2Login(
           @PathVariable("provider") String provider,
           @RequestParam("code") String code) {
+    log.info("OAuth2 login with provider: {}, code: {}", provider, code);
     AuthProvider authProvider= AuthProvider.valueOf(provider.toUpperCase());
     Oauth2Info info = oauth2LoginService.login(authProvider, code);
     User user=userService.registerUserOauth2(

@@ -27,6 +27,23 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    public UserInfo updateUserInfo(UUID userId, String firstname, String lastname, String avatar) {
+        UserInfo userInfo = userInfoRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException("UserInfo not found for userId: " + userId));
+        if (firstname != null && !firstname.isEmpty()) {
+            userInfo.setFirstName(firstname);
+        }
+        if (lastname != null && !lastname.isEmpty()) {
+            userInfo.setLastName(lastname);
+        }
+        if (avatar != null && !avatar.isEmpty()) {
+            userInfo.setAvatar(avatar);
+        }
+
+        return userInfoRepository.save(userInfo);
+    }
+
+    @Override
     public UserInfo getUserInfoByUserId(UUID userId) {
         return userInfoRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException("UserInfo not found for userId: " + userId));

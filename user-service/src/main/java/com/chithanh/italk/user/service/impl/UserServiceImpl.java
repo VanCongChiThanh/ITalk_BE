@@ -129,8 +129,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public User registerUserOauth2(
       String firstname, String lastname, String email, String avatar, AuthProvider provider,String providerId) {
-    if (userRepository.existsByEmail(email.toLowerCase())) {
-      throw new BadRequestException(MessageConstant.REGISTER_EMAIL_ALREADY_IN_USE);
+    Optional<User> existingUser = userRepository.findByEmail(email.toLowerCase());
+    if (existingUser.isPresent()) {
+      User user = existingUser.get();
+      userInfoService.updateUserInfo(user.getId(), firstname, lastname, avatar);
+      return user;
     }
     User user = this.toUserEntity(email, null);
     user.setRole(Role.ROLE_USER);

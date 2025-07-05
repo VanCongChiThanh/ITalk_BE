@@ -71,10 +71,10 @@ public class UserController {
   public ResponseEntity<ResponseDataAPI> getUser(
           @CurrentUser UserPrincipal userPrincipal, HttpServletRequest request) {
     User user = userService.findById(userPrincipal.getId());
-
+    UserInfo userInfo = userInfoService.getUserInfoByUserId(user.getId());
     return ResponseEntity.ok(
         ResponseDataAPI.successWithoutMeta(
-            UserResponse.createUserResponseWithMainInfo(user, this.getProvider(request))));
+            UserResponse.createUserResponseWithMainInfo(user, userInfo,this.getProvider(request))));
   }
 
   /**

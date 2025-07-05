@@ -3,6 +3,7 @@ package com.chithanh.italk.user.payload.response;
 import com.chithanh.italk.security.domain.User;
 import com.chithanh.italk.security.domain.enums.ActiveStatus;
 import com.chithanh.italk.security.domain.enums.AuthProvider;
+import com.chithanh.italk.user.domain.UserInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -52,11 +53,14 @@ public class UserResponse {
    * @param user {@link User}
    * @return UserResponse
    */
-  public static UserResponse createUserResponseWithMainInfo(User user, AuthProvider provider) {
+  public static UserResponse createUserResponseWithMainInfo(User user, UserInfo info, AuthProvider provider) {
     return UserResponse.builder()
         .id(user.getId())
         .email(user.getEmail())
         .role(user.getSubRole())
+        .firstName(info != null ? info.getFirstName() : null)
+        .lastName(info != null ? info.getLastName() : null)
+        .avatar(info != null ? info.getAvatar() : null)
         .provider(provider)
         .active(user.getIsEnabled())
         .activeStatus(user.getActiveStatus())

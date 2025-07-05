@@ -6,5 +6,6 @@ import java.util.UUID;
 
 public interface UserInfoService {
     UserInfo createUserInfo(UUID userId, String firstname, String lastname,String avatar);
+    UserInfo updateUserInfo(UUID userId, String firstname, String lastname, String avatar);
     UserInfo getUserInfoByUserId(UUID userId);
 }
