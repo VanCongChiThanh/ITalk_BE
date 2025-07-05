@@ -260,3 +260,7 @@ challenge_not_found:
 all_challenge_completed:
   code: ERR.CH0201
   message: All challenges completed
+#user follow
+user_follow_not_found:
+  code: ERR.UF0101
+  message: User follow not found
