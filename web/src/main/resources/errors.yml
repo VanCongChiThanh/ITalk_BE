@@ -278,3 +278,6 @@ post_not_found:
 submission_id_required:
   code: ERR.PO0201
   message: Submission id is required for submission post
+submission_already_exists:
+  code: ERR.PO0202
+  message: Submission already exists for this post

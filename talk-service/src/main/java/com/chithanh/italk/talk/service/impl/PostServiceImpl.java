@@ -31,14 +31,17 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse createPost(User user, PostRequest request) {
         Post post = new Post();
-        post.setContent(request.getContent());
-        post.setUser(user);
         if(request.getType().equals(PostType.SUBMISSION)) {
             if(request.getSubmissionId() == null){
                 throw new BadRequestException(MessageConstant.SUBMISSION_ID_REQUIRED);
             }
+            if(existsBySubmissionId(request.getSubmissionId())){
+                throw new BadRequestException(MessageConstant.SUBMISSION_ALREADY_EXISTS);
+            }
             post.setSubmission(submissionService.findById(request.getSubmissionId()));
         }
+        post.setContent(request.getContent());
+        post.setUser(user);
         post.setType(request.getType());
         Post savedPost = postRepository.save(post);
         PostResponse postResponse = PostResponse.builder()
@@ -102,5 +105,8 @@ public class PostServiceImpl implements PostService {
                     .createdAt(post.getCreatedAt())
                     .build();
         });
+    }
+    private boolean existsBySubmissionId(UUID submissionId) {
+        return postRepository.existsBySubmissionId(submissionId);
     }
 }

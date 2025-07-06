@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface PostRepository extends JpaRepository<Post, UUID> {
     @EntityGraph(attributePaths = {"submission", "submission.challenge"})
     Page<Post> findByType(PostType type, Pageable pageable);
+
+    boolean existsBySubmissionId(UUID submissionId);
 }

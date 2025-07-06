@@ -66,5 +66,6 @@ public final class MessageConstant {
   //post
   public static final String POST_NOT_FOUND = "post_not_found";
   public static final String SUBMISSION_ID_REQUIRED = "submission_id_required";
+  public static final String SUBMISSION_ALREADY_EXISTS = "submission_already_exists";
   private MessageConstant() {}
 }
