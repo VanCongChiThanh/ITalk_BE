@@ -58,9 +58,13 @@ public final class MessageConstant {
   //Challenge
   public static final String CHALLENGE_NOT_FOUND = "challenge_not_found";
   public static final String ALL_CHALLENGES_COMPLETED = "all_challenges_completed";
+  //submission
+    public static final String SUBMISSION_NOT_FOUND = "submission_not_found";
   //user follow
   public static final String USER_FOLLOW_NOT_FOUND = "user_follow_not_found";
   public static final String USER_FOLLOW_ALREADY_EXISTS = "user_follow_already_exists";
-
+  //post
+  public static final String POST_NOT_FOUND = "post_not_found";
+  public static final String SUBMISSION_ID_REQUIRED = "submission_id_required";
   private MessageConstant() {}
 }

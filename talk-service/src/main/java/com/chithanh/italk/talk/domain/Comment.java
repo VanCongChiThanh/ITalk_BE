@@ -25,14 +25,13 @@ public class Comment extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)
     private TargetType targetType;
+
+    @Column(nullable = false)
     private UUID targetId; // ID of the reel,submission or comment being replied to
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-
     private User user; // User who made the comment
 
     private String content;
-
-    private Integer likesCount = 0;
 }

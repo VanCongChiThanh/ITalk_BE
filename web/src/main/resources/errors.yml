@@ -260,6 +260,10 @@ challenge_not_found:
 all_challenge_completed:
   code: ERR.CH0201
   message: All challenges completed
+#submission
+submission_not_found:
+  code: ERR.SU0101
+  message: Submission not found
 #user follow
 user_follow_not_found:
   code: ERR.UF0101
@@ -267,3 +271,10 @@ user_follow_not_found:
 user_follow_already_exists:
     code: ERR.UF0201
     message: User follow already exists
+#post
+post_not_found:
+  code: ERR.PO0101
+  message: Post not found
+submission_id_required:
+  code: ERR.PO0201
+  message: Submission id is required for submission post
