@@ -113,10 +113,12 @@ public class UserServiceImpl implements UserService {
   @Override
   public User registerUser(
       String firstname, String lastname, String email, String password, Role role) {
+    if(role.equals(Role.ROLE_ADMIN)) {
+      throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
+    }
     if (userRepository.existsByEmail(email.toLowerCase())) {
       throw new BadRequestException(MessageConstant.REGISTER_EMAIL_ALREADY_IN_USE);
     }
-
     User user = this.toUserEntity(email, password);
     user.setRole(role);
     User result = userRepository.save(user);
