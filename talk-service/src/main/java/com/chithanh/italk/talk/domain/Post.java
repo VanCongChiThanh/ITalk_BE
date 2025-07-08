@@ -3,6 +3,7 @@ package com.chithanh.italk.talk.domain;
 import com.chithanh.italk.common.domain.AbstractEntity;
 import com.chithanh.italk.security.domain.User;
 import com.chithanh.italk.talk.domain.enums.PostType;
+import com.chithanh.italk.talk.domain.media.FileImage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

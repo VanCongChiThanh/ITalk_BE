@@ -60,6 +60,7 @@ public final class MessageConstant {
   public static final String ALL_CHALLENGES_COMPLETED = "all_challenges_completed";
   //submission
     public static final String SUBMISSION_NOT_FOUND = "submission_not_found";
+    public static final String CHALLENGE_TODAY_ALREADY_COMPLETED = "challenge_today_already_completed";
   //user follow
   public static final String USER_FOLLOW_NOT_FOUND = "user_follow_not_found";
   public static final String USER_FOLLOW_ALREADY_EXISTS = "user_follow_already_exists";

@@ -62,6 +62,18 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfos;
     }
 
+    @Override
+    public List<UserInfo> getUserInfosByUserIds(List<UUID> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return List.of();
+        }
+        List<UserInfo> userInfos = userInfoRepository.findAllByUserIdIn(userIds);
+        if (userInfos.isEmpty()) {
+            throw new NotFoundException("No UserInfo found for the provided userIds");
+        }
+        return userInfos;
+    }
+
     private UserInfo toUserInfoEntity(UUID userId, String firstname, String lastname) {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(userId);

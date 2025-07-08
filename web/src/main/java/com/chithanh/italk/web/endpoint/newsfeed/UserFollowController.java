@@ -1,4 +1,4 @@
-package com.chithanh.italk.web.endpoint.talk;
+package com.chithanh.italk.web.endpoint.newsfeed;
 
 import com.chithanh.italk.common.payload.general.PageInfo;
 import com.chithanh.italk.common.payload.general.ResponseDataAPI;
@@ -10,12 +10,9 @@ import com.chithanh.italk.talk.payload.response.FollowerResponse;
 import com.chithanh.italk.talk.payload.response.FollowingResponse;
 import com.chithanh.italk.talk.payload.response.UserFollowResponse;
 import com.chithanh.italk.talk.service.UserFollowService;
-import com.nimbusds.openid.connect.sdk.UserInfoResponse;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

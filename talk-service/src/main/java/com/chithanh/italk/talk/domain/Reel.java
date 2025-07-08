@@ -1,5 +1,6 @@
 package com.chithanh.italk.talk.domain;
 
+import com.chithanh.italk.talk.domain.media.Video;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,9 @@ public class Reel {
 
     private String description;
 
-    @Column(nullable = false)
-    private String mediaUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_id", nullable = false)
+    private Video video;
 
     private Integer duration; // Duration in seconds
 }

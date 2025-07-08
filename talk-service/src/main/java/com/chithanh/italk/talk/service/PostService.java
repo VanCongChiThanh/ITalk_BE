@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 public interface PostService {
-    PostResponse createPost(User user, PostRequest request);
-    PostResponse updatePost(UUID postId, PostRequest request);
+    PostResponse createPost(UUID userId, PostRequest request);
+    PostResponse updatePost(UUID postId, PostRequest request,UUID userId);
     Page<PostResponse> getPostsByType(PostType type, Pageable pageable);
 }

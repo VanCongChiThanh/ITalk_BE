@@ -27,18 +27,13 @@ import java.util.UUID;
 public class PostController {
     private final PostService postService;
     private final UserService userService;
-    @PostMapping("users/{userId}/posts")
+    @PostMapping("/posts")
     @ApiOperation("Create a new post")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseDataAPI> createPost(
             @RequestBody PostRequest postRequest,
-            @PathVariable UUID userId,
             @CurrentUser UserPrincipal userPrincipal) {
-        if (userPrincipal == null || !userPrincipal.getId().equals(userId)) {
-            return ResponseEntity.badRequest().body(ResponseDataAPI.error("You cannot create a post on behalf of another user"));
-        }
-        User user = userService.findById(userId);
-        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(postService.createPost(user,postRequest)));
+        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(postService.createPost(userPrincipal.getId(),postRequest)));
     }
     @GetMapping("posts/{postType}")
     @ApiOperation("Get all posts by type")
@@ -56,18 +51,14 @@ public class PostController {
                 new PageInfo(pageable.getPageNumber() + 1, postResponsesPage.getTotalPages(), postResponsesPage.getTotalElements());
         return ResponseEntity.ok(ResponseDataAPI.success(postResponsesPage.getContent(), pageInfo));
     }
-    @PatchMapping("users/{userId}/posts/{postId}")
+    @PatchMapping("/posts/{postId}")
     @ApiOperation("Update a post")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseDataAPI> updatePost(
             @PathVariable UUID postId,
-            @PathVariable UUID userId,
             @RequestBody PostRequest postRequest,
             @CurrentUser UserPrincipal userPrincipal) {
-        if (userPrincipal == null || !userPrincipal.getId().equals(userId)) {
-            return ResponseEntity.badRequest().body(ResponseDataAPI.error("You cannot create a post on behalf of another user"));
-        }
-        PostResponse updatedPost = postService.updatePost(postId, postRequest);
+        PostResponse updatedPost = postService.updatePost(postId, postRequest, userPrincipal.getId());
         return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(updatedPost));
     }
 
