@@ -1,6 +1,7 @@
-package com.chithanh.italk.talk.domain;
+package com.chithanh.italk.talk.domain.media;
 
 import com.chithanh.italk.common.domain.AbstractEntity;
+import com.chithanh.italk.talk.domain.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

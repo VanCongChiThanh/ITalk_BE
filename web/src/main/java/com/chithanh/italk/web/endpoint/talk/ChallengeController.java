@@ -3,6 +3,8 @@ package com.chithanh.italk.web.endpoint.talk;
 import com.chithanh.italk.common.payload.general.PageInfo;
 import com.chithanh.italk.common.payload.general.ResponseDataAPI;
 import com.chithanh.italk.common.utils.PagingUtils;
+import com.chithanh.italk.security.annotation.CurrentUser;
+import com.chithanh.italk.security.domain.UserPrincipal;
 import com.chithanh.italk.talk.domain.Challenge;
 import com.chithanh.italk.talk.domain.Submission;
 import com.chithanh.italk.talk.mapper.ChallengeMapper;
@@ -30,8 +32,6 @@ import java.util.UUID;
 public class ChallengeController {
     private final ChallengeService challengeService;
     private final SubmissionService submissionService;
-    private final ChallengeMapper challengeMapper;
-    private final SubmissionMapper submissionMapper;
 
     @GetMapping("/challenges/all")
     @PreAuthorize("hasRole('ADMIN')")
@@ -43,42 +43,28 @@ public class ChallengeController {
             @RequestParam(name = "paging", defaultValue = "10") int paging
     ) {
         Pageable pageable = PagingUtils.makePageRequest(sortBy, order, page, paging);
-        Page<Challenge> pages = challengeService.getAllChallenges(pageable);
-        PageInfo pageInfo =
-                new PageInfo(pageable.getPageNumber() + 1, pages.getTotalPages(), pages.getTotalElements());
-        List<ChallengeResponse> data = pages.getContent().stream()
-                .map(challengeMapper::toChallengeResponse)
-                .toList();
-        return ResponseEntity.ok(ResponseDataAPI.success(data, pageInfo));
+        Page<ChallengeResponse> pageChallenges = challengeService.getAllChallenges(pageable);
+        PageInfo pageInfo = new PageInfo(
+                pageChallenges.getNumber() + 1,
+                pageChallenges.getTotalPages(),
+                pageChallenges.getTotalElements()
+        );
+        return ResponseEntity.ok(ResponseDataAPI.success(pageChallenges.getContent(), pageInfo));
     }
-    @GetMapping("/users/{userId}/challenges/random")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @ApiOperation("Get a random challenge for the user")
-    public ResponseEntity<ResponseDataAPI> getRandomChallengeForUser(
-            @PathVariable UUID userId
-    ) {
-        List<UUID> completedChallengeIds = submissionService.findChallengeIdsByUserId(userId);
-        Challenge challenge = challengeService.getRandomChallenge(userId, completedChallengeIds);
-        ChallengeResponse response = challengeMapper.toChallengeResponse(challenge);
-        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta( response));
-    }
+
     @PostMapping("/challenges")
     @ApiOperation("create a new challenge")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDataAPI> createChallenge(@Valid @RequestBody ChallengeRequest challengeRequest)
     {
-        Challenge createdChallenge = challengeService.createChallenge(challengeRequest);
-        ChallengeResponse response = challengeMapper.toChallengeResponse(createdChallenge);
+        ChallengeResponse response = challengeService.createChallenge(challengeRequest);
         return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(response));
     }
     @PostMapping("/challenges/bulk")
     @ApiOperation("create multiple challenges")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDataAPI> createChallenges(@Valid @RequestBody List<ChallengeRequest> requests) {
-        List<Challenge> createdChallenges = challengeService.createChallenges(requests);
-        List<ChallengeResponse> responses = createdChallenges.stream()
-                .map(challengeMapper::toChallengeResponse)
-                .toList();
+        List<ChallengeResponse> responses = challengeService.createChallenges(requests);
         return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(responses));
     }
 
@@ -89,23 +75,22 @@ public class ChallengeController {
             @PathVariable UUID challengeId,
             @RequestBody ChallengeRequest challengeRequest
     ) {
-        Challenge updatedChallenge = challengeService.updateChallenge(challengeId, challengeRequest);
-        ChallengeResponse response = challengeMapper.toChallengeResponse(updatedChallenge);
+        ChallengeResponse response =  challengeService.updateChallenge(challengeId, challengeRequest);
         return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(response));
     }
-    @GetMapping("/users/{userId}/today-challenge")
+    @GetMapping("/today-challenge")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseDataAPI> getTodayChallengeOrSubmission(
-            @PathVariable UUID userId
-    ) {
+            @CurrentUser UserPrincipal userPrincipal
+            ) {
+        UUID userId = userPrincipal.getId();
         if( submissionService.findTodaySubmission(userId) != null) {
-            Submission todaySubmission = submissionService.findTodaySubmission(userId);
-            SubmissionResponse response = submissionMapper.toSubmissionResponse(todaySubmission);
-            return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(response));
+            SubmissionResponse submission =  submissionService.findTodaySubmission(userId);
+            return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(submission));
         } else {
-            Challenge challenge = challengeService.getRandomChallenge(userId, submissionService.findChallengeIdsByUserId(userId));
-            ChallengeResponse response = challengeMapper.toChallengeResponse(challenge);
-            return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(response));
+            List<UUID> completedChallengeIds = submissionService.findChallengeIdsByUserId(userId);
+            ChallengeResponse randomChallenge = challengeService.getRandomChallenge(userId, completedChallengeIds);
+            return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(randomChallenge));
         }
     }
 

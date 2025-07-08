@@ -1,6 +1,7 @@
 package com.chithanh.italk.talk.payload.response;
 
 
+import com.chithanh.italk.talk.domain.Submission;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

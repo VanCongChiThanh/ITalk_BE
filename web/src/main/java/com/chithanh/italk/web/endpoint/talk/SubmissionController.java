@@ -1,8 +1,11 @@
 package com.chithanh.italk.web.endpoint.talk;
 
 import com.chithanh.italk.common.payload.general.ResponseDataAPI;
+import com.chithanh.italk.security.annotation.CurrentUser;
+import com.chithanh.italk.security.domain.UserPrincipal;
 import com.chithanh.italk.talk.domain.Submission;
 import com.chithanh.italk.talk.mapper.SubmissionMapper;
+import com.chithanh.italk.talk.payload.response.SubmissionResponse;
 import com.chithanh.italk.talk.service.SubmissionService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +21,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SubmissionController {
     private final SubmissionService submissionService;
-    private final SubmissionMapper submissionMapper;
 
-    @PostMapping("/challenges/{challengeId}/users/{userId}/submissions")
+    @PostMapping("/challenges/{challengeId}/submit")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ApiOperation("submit a challenge")
     public ResponseEntity<ResponseDataAPI> submitChallenge(
             @PathVariable("challengeId") UUID challengeId,
-            @PathVariable("userId") UUID userId,
+            @CurrentUser UserPrincipal userPrincipal,
             @RequestParam MultipartFile audio
     ) {
-        Submission submission = submissionService.submit(
-                challengeId, userId, audio);
-        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(submissionMapper.toSubmissionResponse(submission)));
+        SubmissionResponse submission = submissionService.submit(
+                challengeId, userPrincipal.getId(), audio);
+        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(submission));
     }
 
 }

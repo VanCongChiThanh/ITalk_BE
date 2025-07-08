@@ -264,6 +264,9 @@ all_challenge_completed:
 submission_not_found:
   code: ERR.SU0101
   message: Submission not found
+challenge_today_already_completed:
+  code: ERR.SU0201
+  message: Challenge today already completed
 #user follow
 user_follow_not_found:
   code: ERR.UF0101
