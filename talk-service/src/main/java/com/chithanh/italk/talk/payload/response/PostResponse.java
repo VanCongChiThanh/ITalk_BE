@@ -1,9 +1,8 @@
 package com.chithanh.italk.talk.payload.response;
 
 import com.chithanh.italk.talk.domain.Post;
-import com.chithanh.italk.talk.domain.Submission;
 import com.chithanh.italk.talk.domain.enums.PostType;
-import com.chithanh.italk.user.domain.UserInfo;
+import com.chithanh.italk.user.payload.response.UserInfoResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

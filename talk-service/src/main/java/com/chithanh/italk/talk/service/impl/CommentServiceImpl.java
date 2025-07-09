@@ -8,7 +8,7 @@ import com.chithanh.italk.talk.domain.Comment;
 import com.chithanh.italk.talk.domain.enums.TargetType;
 import com.chithanh.italk.talk.payload.request.CommentRequest;
 import com.chithanh.italk.talk.payload.response.CommentResponse;
-import com.chithanh.italk.talk.payload.response.UserInfoResponse;
+import com.chithanh.italk.user.payload.response.UserInfoResponse;
 import com.chithanh.italk.talk.repository.CommentRepository;
 import com.chithanh.italk.talk.service.CommentService;
 import com.chithanh.italk.user.domain.UserInfo;

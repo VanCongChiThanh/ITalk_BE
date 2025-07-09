@@ -1,4 +1,4 @@
-package com.chithanh.italk.talk.payload.response;
+package com.chithanh.italk.user.payload.response;
 
 import com.chithanh.italk.user.domain.UserInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -1,4 +1,4 @@
-package com.chithanh.italk.web.endpoint.newsfeed;
+package com.chithanh.italk.web.endpoint.user;
 
 import com.chithanh.italk.common.payload.general.PageInfo;
 import com.chithanh.italk.common.payload.general.ResponseDataAPI;

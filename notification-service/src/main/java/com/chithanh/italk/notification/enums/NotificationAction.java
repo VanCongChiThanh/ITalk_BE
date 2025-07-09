@@ -19,4 +19,5 @@ public enum NotificationAction {
 
   // System / Admin
   ADMIN_ANNOUNCEMENT
+
 }

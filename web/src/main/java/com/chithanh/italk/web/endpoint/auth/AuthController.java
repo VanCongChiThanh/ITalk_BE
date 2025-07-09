@@ -13,12 +13,10 @@ import com.chithanh.italk.security.domain.enums.AuthProvider;
 import com.chithanh.italk.security.payload.request.LoginRequest;
 import com.chithanh.italk.security.payload.request.RefreshTokenRequest;
 import com.chithanh.italk.security.payload.response.Oauth2Info;
-import com.chithanh.italk.security.payload.response.OauthAccessTokenResponse;
 import com.chithanh.italk.security.service.Oauth2LoginService;
 import com.chithanh.italk.security.service.OauthAccessTokenService;
 import com.chithanh.italk.security.token.TokenProvider;
 import com.chithanh.italk.user.payload.request.user.SignOutAllRequest;
-import com.chithanh.italk.user.service.UserInfoService;
 import com.chithanh.italk.user.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +47,6 @@ public class AuthController {
   private final OauthAccessTokenService oauthAccessTokenService;
 
   private final UserService userService;
-  private final UserInfoService userInfoService;
   private final Oauth2LoginService oauth2LoginService;
 
   /**
