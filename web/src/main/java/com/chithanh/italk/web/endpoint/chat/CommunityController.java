@@ -50,7 +50,15 @@ public class CommunityController {
             @PathVariable("userId") UUID userId,
             @CurrentUser UserPrincipal userPrincipal
     ) {
-            communityService.addMemberToCommunity(userPrincipal.getId(), communityId, userId);
-            return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(null));
+            return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(communityService.addMemberToCommunity(userPrincipal.getId(), communityId, userId)));
+    }
+    @PostMapping("/communities/{communityId}/leave")
+    @ApiOperation("Leave a community")
+    public ResponseEntity<ResponseDataAPI> leaveCommunity(
+            @PathVariable("communityId") UUID communityId,
+            @CurrentUser UserPrincipal userPrincipal
+    ) {
+        JoinCommunityResponse response = communityService.leaveCommunity(userPrincipal.getId(), communityId);
+        return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta(response));
     }
 }

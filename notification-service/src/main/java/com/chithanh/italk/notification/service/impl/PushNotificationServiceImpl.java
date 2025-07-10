@@ -1,7 +1,7 @@
 package com.chithanh.italk.notification.service.impl;
 
 import com.chithanh.italk.common.constant.CommonConstant;
-import com.chithanh.italk.notification.response.PushNotificationResponse;
+import com.chithanh.italk.notification.payload.response.PushNotificationResponse;
 import com.chithanh.italk.notification.service.PushNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

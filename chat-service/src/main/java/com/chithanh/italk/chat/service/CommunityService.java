@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface CommunityService {
     CommunityResponse createCommunityByAdmin(CommunityRequest request);
-    void addMemberToCommunity(UUID actorId,UUID communityId, UUID userId);
+    JoinCommunityResponse addMemberToCommunity(UUID actorId,UUID communityId, UUID userId);
     JoinCommunityResponse joinCommunity(UUID actorId, UUID communityId);
+    JoinCommunityResponse leaveCommunity(UUID actorId, UUID communityId);
 }

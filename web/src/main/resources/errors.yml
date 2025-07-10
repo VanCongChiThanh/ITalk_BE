@@ -284,3 +284,14 @@ submission_id_required:
 submission_already_exists:
   code: ERR.PO0202
   message: Submission already exists for this post
+#community
+community_not_found:
+  code: ERR.CO0101
+  message: Community not found
+# Community member
+community_member_not_found:
+  code: ERR.CO0201
+  message: Community member not found
+community_member_already_exists:
+    code: ERR.CO0202
+    message: Community member already exists

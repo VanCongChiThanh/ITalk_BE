@@ -18,6 +18,11 @@ public enum NotificationAction {
   FOLLOW_YOU,
 
   // System / Admin
-  ADMIN_ANNOUNCEMENT
+  ADMIN_ANNOUNCEMENT,
+
+  //comnunity
+  JOIN_COMMUNITY,
+  LEAVE_COMMUNITY,
+
 
 }
