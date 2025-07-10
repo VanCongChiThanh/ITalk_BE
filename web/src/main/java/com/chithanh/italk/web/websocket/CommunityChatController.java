@@ -1,4 +1,4 @@
-package com.chithanh.italk.web.endpoint.chat;
+package com.chithanh.italk.web.websocket;
 
 import com.chithanh.italk.chat.domain.Message;
 import com.chithanh.italk.chat.payload.request.ChatMessageRequest;

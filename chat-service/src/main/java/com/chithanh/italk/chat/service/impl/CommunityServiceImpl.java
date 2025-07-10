@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -73,11 +74,12 @@ public class CommunityServiceImpl implements CommunityService {
                 .resourceId(community.getSlug())
                 .createdAt(Timestamp.from(Instant.now()))
                 .build();
+
         this.pushNotificationService.pushNotification(
                 NotificationPosition.NOTIFICATION.toString(),
                 NotificationType.COMMUNITY.toString(),
                 NotificationAction.JOIN_COMMUNITY.toString(),
-                userId,
+                Collections.singletonList(userId),
                 notificationPayload
                 );
         return JoinCommunityResponse.builder()

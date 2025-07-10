@@ -1,4 +1,4 @@
-package com.chithanh.italk.web.endpoint.chat;
+package com.chithanh.italk.web.endpoint.community;
 
 import com.chithanh.italk.chat.payload.request.CommunityRequest;
 import com.chithanh.italk.chat.payload.response.CommunityResponse;

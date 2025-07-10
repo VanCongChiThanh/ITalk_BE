@@ -1,6 +1,7 @@
 package com.chithanh.italk.notification.service;
 
 
+import java.util.List;
 import java.util.UUID;
 
 public interface PushNotificationService {
@@ -9,6 +10,7 @@ public interface PushNotificationService {
           String notificationPosition,
           String notificationType,
           String notificationAction,
-          UUID receiverId,
-          Object data);
+          List<UUID> receiverIds,
+          Object data
+  );
 }
