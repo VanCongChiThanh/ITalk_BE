@@ -36,7 +36,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void maskAllNotificationsAsRead(UUID userId) {
-        notificationRepository.findAllByReceiverIdAndRead(userId, false)
+        notificationRepository.findAllByReceiverIdAndIsRead(userId, false)
                 .forEach(notification -> {
                     notification.setRead(true);
                     notificationRepository.save(notification);
@@ -45,7 +45,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<NotificationResponse> getAllNotificationsByUserId(UUID userId) {
-        return notificationRepository.findAllByReceiverIdAndRead(userId, false)
+        return notificationRepository.findAllByReceiverIdAndIsRead(userId, false)
                 .stream()
                 .map(NotificationResponse::toResponse)
                 .toList();
@@ -53,7 +53,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Integer countUnreadNotificationsByUserId(UUID userId) {
-        return notificationRepository.countByReceiverIdAndRead(userId, false);
+        return notificationRepository.countByReceiverIdAndIsRead(userId, false);
     }
 
 }

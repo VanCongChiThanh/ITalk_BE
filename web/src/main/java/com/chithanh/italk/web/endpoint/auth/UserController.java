@@ -147,34 +147,6 @@ public class UserController {
     return ResponseEntity.ok(ResponseDataAPI.success(null, null));
   }
 
-  /**
-   * User create queue on rabbitmq
-   *
-   * @param userPrincipal Current User
-   * @return ResponseDataAPI
-   */
-  @GetMapping("/notifications/endpoint")
-  @PreAuthorize("hasRole('USER')")
-  public ResponseEntity<ResponseDataAPI> getEndpoint(@CurrentUser UserPrincipal userPrincipal) {
-    RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-
-    String queueName = CommonFunction.generateQueueName(userPrincipal.getId());
-    rabbitAdmin.declareQueue(new Queue(queueName, false, false, false));
-
-    String exchangeName = CommonConstant.NOTIFICATION_EXCHANGE_NAME_PREFIX + userPrincipal.getId();
-    rabbitAdmin.declareExchange(new DirectExchange(exchangeName, false, false));
-    rabbitAdmin.declareBinding(
-        new Binding(
-            queueName,
-            Binding.DestinationType.QUEUE,
-            exchangeName,
-            userPrincipal.getId().toString(),
-            null));
-
-    return ResponseEntity.ok(
-        ResponseDataAPI.builder().status(CommonConstant.SUCCESS).data(queueName).build());
-  }
-
   private AuthProvider getProvider(HttpServletRequest request) {
     String bearerToken = request.getHeader("Authorization");
     if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
