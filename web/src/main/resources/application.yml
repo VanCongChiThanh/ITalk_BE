@@ -2,6 +2,9 @@ server:
   servlet:
     context-path: /api
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   main:
     banner-mode: off
   servlet:
