@@ -28,5 +28,6 @@ public class Video {
 
     @Enumerated(EnumType.STRING)
     private VideoStatus status; // UPLOADED, TRANSCODING, READY, FAILED
+
     private Instant expiryTime;
 }

@@ -10,6 +10,7 @@ import com.chithanh.italk.talk.payload.response.ChallengeResponse;
 import com.chithanh.italk.talk.payload.response.SubmissionResponse;
 import com.chithanh.italk.talk.service.ChallengeService;
 import com.chithanh.italk.talk.service.SubmissionService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
+@Api(tags = "Challenge APIs")
 public class ChallengeController {
     private final ChallengeService challengeService;
     private final SubmissionService submissionService;
