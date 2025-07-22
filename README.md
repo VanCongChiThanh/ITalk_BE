@@ -45,3 +45,5 @@ cd i-talk
 2 .Configure environment variables using application.yml or .env files per service
 3.Run with Docker Compose:
  compose up --build
+<img width="1823" height="822" alt="image" src="https://github.com/user-attachments/assets/eedb0f75-ed9a-41b5-9135-0ad4578e7c87" />
+
