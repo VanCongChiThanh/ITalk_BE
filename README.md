@@ -36,19 +36,6 @@ It helps users:
 - Spring Mail
 - Docker and Docker Compose
 
-## Project Structure
-
-italk/
-├── ai-service/
-├── chat-service/
-├── common-service/
-├── email-service/
-├── file-service/
-├── notification-service/
-├── security-service/
-├── talk-service/
-├── user-service/
-└── web/
 
 ## Quick Start with Docker Compose
 
