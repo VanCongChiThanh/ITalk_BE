@@ -23,6 +23,7 @@ It helps users:
 - Push Notifications using RabbitMQ and WebSocket
 - Email Notifications for verification and updates
 - JWT and OAuth 2.0 (Google, Facebook) Authentication
+<img width="1823" height="822" alt="image" src="https://github.com/user-attachments/assets/eedb0f75-ed9a-41b5-9135-0ad4578e7c87" />
 
 ## Tech Stack
 
@@ -43,9 +44,12 @@ It helps users:
 
    ```bash
    git clone https://github.com/yourusername/maitalk.git
-   cd maitalk
+   cd italk
 2 .Configure environment variables using application.yml or .env files per service
+
 3.Run with Docker Compose:
+
+   ```bash
 docker compose up --build
-<img width="1823" height="822" alt="image" src="https://github.com/user-attachments/assets/eedb0f75-ed9a-41b5-9135-0ad4578e7c87" />
+
 
