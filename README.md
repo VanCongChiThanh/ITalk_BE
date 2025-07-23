@@ -30,7 +30,7 @@ It helps users:
 - Spring Boot (multi-module, RESTful APIs, WebSocket)
 - Spring Security (JWT, OAuth 2.0)
 - Spring Data JPA with PostgreSQL
-- WebSocket (Spring Messaging)
+- WebSocket 
 - RabbitMQ
 - Cloudinary or Google Cloud Storage
 - Gemini API (AI speech feedback)
